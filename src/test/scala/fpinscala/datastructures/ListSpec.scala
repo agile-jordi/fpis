@@ -32,4 +32,16 @@ class ListSpec extends FlatSpec {
     assert(List.tail(List(1,2,3)) === List(2,3))
   }
 
+  behavior of "List.setHead"
+
+  it should "fail on empty list" in {
+    intercept[NoSuchElementException]{
+      List.setHead(List(),23)
+    }
+  }
+
+  it should "set the head of a non empty list" in {
+    assert(List.setHead(List(1,2,3),23) === List(23,2,3))
+  }
+
 }

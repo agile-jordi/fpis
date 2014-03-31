@@ -9,6 +9,7 @@ case object Nil extends List[Nothing]
 case class Cons[+A](head: A, tail: List[A]) extends List[A]
 
 object List {
+
   def sum(ints: List[Int]): Int = ints match {
     case Nil => 0
     case Cons(i, xs) => i + sum(xs)
@@ -27,6 +28,11 @@ object List {
   def tail[A](list: List[A]): List[A] = list match {
     case Nil => throw new NoSuchElementException
     case Cons(x,xs) => xs
+  }
+
+  def setHead[A](list: List[A], h: A): List[A] = list match {
+    case Nil => throw new NoSuchElementException
+    case Cons(x,xs) => Cons(h,xs)
   }
 
 
