@@ -71,4 +71,15 @@ object List {
   def product2(ns: List[Double]) =
     foldRight(ns, 1.0)(_ * _)
 
+  def shortFoldRight[A, B](as: List[A], z: B, shortcut:B)(f: (A, B) => B): (B,Int) =
+    as match {
+      case Nil => (z,0)
+      case Cons(x, xs) if x == shortcut  => (shortcut,0)
+      case Cons(x, xs) =>
+        val (res, count) = shortFoldRight(xs,z,shortcut)(f)
+        (f(x, res), count + 1)
+    }
+
+
+
 }

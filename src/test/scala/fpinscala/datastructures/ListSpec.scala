@@ -88,4 +88,10 @@ class ListSpec extends FlatSpec {
     assert(List.init(List(1,2,3,4)) === List(1,2,3))
   }
 
+  behavior of "List.shortFoldRight (fold right with shortcut)"
+
+  it should "shortcut" in {
+    assert(List.shortFoldRight(List(1,0,2,3,4), 1, 0)(_ * _) === (0,1))
+  }
+
 }
