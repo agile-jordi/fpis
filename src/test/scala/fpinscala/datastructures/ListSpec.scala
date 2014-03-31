@@ -94,4 +94,10 @@ class ListSpec extends FlatSpec {
     assert(List.shortFoldRight(List(1,0,2,3,4), 1, 0)(_ * _) === (0,1))
   }
 
+  behavior of "List.foldRigth with list constructors"
+
+  it should "construct the list" in{
+    assert(List.foldRight(List(1,2,3), Nil:List[Int])(Cons(_,_)) === List(1,2,3))
+  }
+
 }
