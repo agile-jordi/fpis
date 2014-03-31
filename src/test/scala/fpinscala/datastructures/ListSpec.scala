@@ -100,4 +100,14 @@ class ListSpec extends FlatSpec {
     assert(List.foldRight(List(1,2,3), Nil:List[Int])(Cons(_,_)) === List(1,2,3))
   }
 
+  behavior of "List.length"
+
+  it should "return 0 for the empty list" in{
+    assert(List.length(List()) === 0)
+  }
+
+  it should "return the length of a non empty list" in {
+    assert(List.length(List(1,2,3)) === 3)
+  }
+
 }
