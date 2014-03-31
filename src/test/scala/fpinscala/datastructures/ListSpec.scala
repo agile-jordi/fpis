@@ -69,11 +69,11 @@ class ListSpec extends FlatSpec {
   behavior of "List.dropWhile"
 
   it should "return the empty list for empty lists" in {
-    assert(List.dropWhile(List(),(e:Any) => true) === List())
+    assert(List.dropWhile(List())(_ => true) === List())
   }
 
   it should "drop the first elements while they match the predicate" in {
-    assert(List.dropWhile[Int](List(2,4,5,6), _ % 2 == 0) === List(5,6))
+    assert(List.dropWhile(List(2,4,5,6))(_ % 2 == 0) === List(5,6))
   }
 
   behavior of "List.init"
