@@ -25,14 +25,20 @@ object List {
     if (elems.isEmpty) Nil
     else Cons(elems.head, apply(elems.tail: _*))
 
-  def tail[A](list: List[A]): List[A] = list match {
-    case Nil => throw new NoSuchElementException
-    case Cons(x,xs) => xs
-  }
+  def tail[A](list: List[A]): List[A] = List.drop(list,1)
 
   def setHead[A](list: List[A], h: A): List[A] = list match {
     case Nil => throw new NoSuchElementException
     case Cons(x,xs) => Cons(h,xs)
+  }
+
+  def drop[A](l: List[A], n: Int): List[A] = {
+    require(n >= 0)
+    l match {
+      case _ if n == 0 => l
+      case Nil => throw new NoSuchElementException
+      case Cons(x,xs) => drop(xs,n-1)
+    }
   }
 
 

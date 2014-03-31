@@ -44,4 +44,26 @@ class ListSpec extends FlatSpec {
     assert(List.setHead(List(1,2,3),23) === List(23,2,3))
   }
 
+  behavior of "List.drop"
+
+  it should "fail if we try to drop more elements than the list have" in{
+    intercept[NoSuchElementException]{
+      List.drop(List(1,2,3),4)
+    }
+  }
+
+  it should "require n to be >= 0" in {
+    intercept[IllegalArgumentException]{
+      List.drop(List(1,2,3),-2)
+    }
+  }
+
+  it should "drop no elements if n == 0" in{
+    assert(List.drop(List(1,2,3),0) === List(1,2,3))
+  }
+
+  it should "drop first n elements" in {
+    assert(List.drop(List(1,2,3,4),2) === List(3,4))
+  }
+
 }
