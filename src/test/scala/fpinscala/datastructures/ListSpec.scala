@@ -20,4 +20,16 @@ class ListSpec extends FlatSpec {
 
   }
 
+  behavior of "List.tail"
+
+  it should "fail on empty lists" in{
+    intercept[NoSuchElementException]{
+      List.tail(List())
+    }
+  }
+
+  it should "return the tail of a non empty list" in {
+    assert(List.tail(List(1,2,3)) === List(2,3))
+  }
+
 }
