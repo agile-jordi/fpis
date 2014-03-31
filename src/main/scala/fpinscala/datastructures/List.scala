@@ -52,4 +52,10 @@ object List {
       case Cons(h, t) => Cons(h, append(t, a2))
     }
 
+  def init[A](l: List[A]): List[A] = l match {
+    case Nil => throw new NoSuchElementException
+    case Cons(x,Nil) => Nil
+    case Cons(x,xs) => Cons(x,init(xs))
+  }
+
 }

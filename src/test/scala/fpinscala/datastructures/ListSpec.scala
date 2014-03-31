@@ -76,4 +76,16 @@ class ListSpec extends FlatSpec {
     assert(List.dropWhile[Int](List(2,4,5,6), _ % 2 == 0) === List(5,6))
   }
 
+  behavior of "List.init"
+
+  it should "fail on the empty list" in {
+    intercept[NoSuchElementException]{
+      List.init(List())
+    }
+  }
+
+  it should "return all but the last element of a non empty list" in {
+    assert(List.init(List(1,2,3,4)) === List(1,2,3))
+  }
+
 }
