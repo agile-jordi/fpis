@@ -128,4 +128,22 @@ class ListSpec extends FlatSpec {
     assert(List.foldLeft(List(1,2,3),"0")(_ + _.toString) === "0123")
   }
 
+  behavior of "List.sumFoldLeft"
+
+  it should "sum a non empty list" in{
+    assert(List.sumFoldLeft(List(1,2,3,4)) === 10)
+  }
+
+  behavior of "List.productFoldLeft"
+
+  it should "multiply a non empty list" in{
+    assert(List.productFoldLeft(List(1,2,3,4)) === 24)
+  }
+
+  behavior of "List.lengthFoldLeft"
+
+  it should "calculate the lenght of a non empty list" in{
+    assert(List.lengthFoldLeft(List(1,2,3,4)) === 4)
+  }
+
 }

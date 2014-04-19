@@ -89,4 +89,9 @@ object List {
     }
   }
 
+  def sumFoldLeft(ns:List[Int]):Int = List.foldLeft(ns,0)(_ + _)
+
+  def productFoldLeft(ds: List[Double]): Double = List.foldLeft(ds,1.0)(_ * _)
+
+  def lengthFoldLeft[A](l: List[A]): Int = List.foldLeft(l,0)((acc,_) => acc + 1)
 }
