@@ -146,4 +146,14 @@ class ListSpec extends FlatSpec {
     assert(List.lengthFoldLeft(List(1,2,3,4)) === 4)
   }
 
+  behavior of "List.reverse"
+
+  it should "reverse the empty list" in{
+    assert(List.reverse(List()) === List())
+  }
+
+  it should "reverse the non empty list" in{
+    assert(List.reverse(List(1,2,3,4)) === List(4,3,2,1))
+  }
+
 }

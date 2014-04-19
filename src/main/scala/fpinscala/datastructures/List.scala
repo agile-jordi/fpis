@@ -94,4 +94,6 @@ object List {
   def productFoldLeft(ds: List[Double]): Double = List.foldLeft(ds,1.0)(_ * _)
 
   def lengthFoldLeft[A](l: List[A]): Int = List.foldLeft(l,0)((acc,_) => acc + 1)
+
+  def reverse[A](l:List[A]):List[A] = List.foldLeft(l,List[A]())((acc,e) => Cons(e,acc))
 }
