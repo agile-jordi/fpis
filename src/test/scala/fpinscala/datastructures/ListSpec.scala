@@ -94,10 +94,22 @@ class ListSpec extends FlatSpec {
     assert(List.shortFoldRight(List(1,0,2,3,4), 1, 0)(_ * _) === (0,1))
   }
 
-  behavior of "List.foldRigth with list constructors"
+  behavior of "List.foldRigth"
 
-  it should "construct the list" in{
+  it should "construct the list when passed in list constructors" in{
     assert(List.foldRight(List(1,2,3), Nil:List[Int])(Cons(_,_)) === List(1,2,3))
+  }
+
+  ignore should "stack overflow when given a really long list" in{
+    // We can't use apply since it is not tail recursive neither
+    val l = (1 to 10000).foldLeft(List[Int]())((acc,n) => Cons(n,acc))
+    try{
+      List.foldRight(l,0)(_ + _)
+      fail("StackOverflowError expected")
+    }catch{
+      case s:StackOverflowError => // Ok
+      case _ => fail("StackOverflowError expected")
+    }
   }
 
   behavior of "List.length"
@@ -108,6 +120,12 @@ class ListSpec extends FlatSpec {
 
   it should "return the length of a non empty list" in {
     assert(List.length(List(1,2,3)) === 3)
+  }
+
+  behavior of "List.foldLeft"
+
+  it should "foldLeft" in {
+    assert(List.foldLeft(List(1,2,3),"0")(_ + _.toString) === "0123")
   }
 
 }
