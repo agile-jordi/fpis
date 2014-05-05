@@ -110,4 +110,7 @@ object List {
   def appendViaFold[A](a1: List[A], a2: List[A]): List[A] = {
     List.foldRightInTermsOfFoldLeft(a1,a2)((e,acc) => Cons(e,acc))
   }
+
+  def concat[A](ll: List[List[A]]):List[A] = List.foldLeft(ll,List[A]())((acc,e) => List.appendViaFold(acc,e))
+
 }

@@ -174,4 +174,10 @@ class ListSpec extends FlatSpec {
     assert(List.appendViaFold(List(1,2),List(3,4,5)) === List(1,2,3,4,5))
   }
 
+  behavior of "listConcat"
+
+  it should "concatenate a list of lists" in{
+    assert(List.concat(List(List(1,2),List(3,4,5),List(6))) === List(1,2,3,4,5,6))
+  }
+
 }
