@@ -113,4 +113,7 @@ object List {
 
   def concat[A](ll: List[List[A]]):List[A] = List.foldLeft(ll,List[A]())((acc,e) => List.appendViaFold(acc,e))
 
+  def map[A,B](l: List[A])(f: A => B): List[B] = List.foldRight(l,List[B]())((e,acc)=>Cons(f(e),acc))
+
+
 }

@@ -180,4 +180,14 @@ class ListSpec extends FlatSpec {
     assert(List.concat(List(List(1,2),List(3,4,5),List(6))) === List(1,2,3,4,5,6))
   }
 
+  behavior of "map"
+
+  it should "add 1 to each element" in{
+    assert(List.map(List(3,4,5))(_ + 1) === List(4,5,6))
+  }
+
+  it should "convert to string" in {
+    assert(List.map(List(1.1,1.2,1.3))(_.toString) === List("1.1","1.2","1.3"))
+  }
+
 }
