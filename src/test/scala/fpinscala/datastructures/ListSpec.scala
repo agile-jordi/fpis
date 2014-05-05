@@ -168,4 +168,10 @@ class ListSpec extends FlatSpec {
     assert(List.foldRightInTermsOfFoldLeft(List(1,2,3),"0")(_.toString + _) === "1230")
   }
 
+  behavior of "appendViaFold"
+
+  it should "append 2 lists" in {
+    assert(List.appendViaFold(List(1,2),List(3,4,5)) === List(1,2,3,4,5))
+  }
+
 }

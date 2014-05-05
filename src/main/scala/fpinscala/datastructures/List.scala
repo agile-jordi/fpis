@@ -106,4 +106,8 @@ object List {
   def foldRightInTermsOfFoldLeft[A,B](l:List[A], z:B)(f:(A,B) => B):B = {
     List.foldLeft(l, (b:B) => b)((acc,e) => b => acc(f(e,b)))(z)
   }
+
+  def appendViaFold[A](a1: List[A], a2: List[A]): List[A] = {
+    List.foldRightInTermsOfFoldLeft(a1,a2)((e,acc) => Cons(e,acc))
+  }
 }
