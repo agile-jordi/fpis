@@ -142,7 +142,7 @@ class ListSpec extends FlatSpec {
 
   behavior of "List.lengthFoldLeft"
 
-  it should "calculate the lenght of a non empty list" in{
+  it should "calculate the length of a non empty list" in{
     assert(List.lengthFoldLeft(List(1,2,3,4)) === 4)
   }
 
@@ -154,6 +154,18 @@ class ListSpec extends FlatSpec {
 
   it should "reverse the non empty list" in{
     assert(List.reverse(List(1,2,3,4)) === List(4,3,2,1))
+  }
+
+  behavior of "List.foldLeftInTermsOfFoldRight"
+
+  it should "concatenate the elements of a non empty list" in{
+    assert(List.foldLeftInTermsOfFoldRight(List(1,2,3),"0")(_ + _.toString) === "0123")
+  }
+
+  behavior of "List.foldRightInTermsOfFoldLeft"
+
+  it should "concatenate the elements of a non empty list" in{
+    assert(List.foldRightInTermsOfFoldLeft(List(1,2,3),"0")(_.toString + _) === "1230")
   }
 
 }

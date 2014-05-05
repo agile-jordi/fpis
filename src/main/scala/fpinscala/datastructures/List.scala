@@ -96,4 +96,14 @@ object List {
   def lengthFoldLeft[A](l: List[A]): Int = List.foldLeft(l,0)((acc,_) => acc + 1)
 
   def reverse[A](l:List[A]):List[A] = List.foldLeft(l,List[A]())((acc,e) => Cons(e,acc))
+
+  // Had to copy the solution for this one...
+  def foldLeftInTermsOfFoldRight[A,B](l: List[A], z: B)(f: (B, A) => B): B = {
+    // foldRight(List(1,2),(b:B) => B)(...) === foldRight(List(1),b:B => f(b,2))(...) == foldRight(List(), b:B => f(f(b,1),2))(...)
+    List.foldRight(l,(b:B) => b)((e,acc) => b => acc(f(b,e)))(z)
+  }
+
+  def foldRightInTermsOfFoldLeft[A,B](l:List[A], z:B)(f:(A,B) => B):B = {
+    List.foldLeft(l, (b:B) => b)((acc,e) => b => acc(f(e,b)))(z)
+  }
 }
