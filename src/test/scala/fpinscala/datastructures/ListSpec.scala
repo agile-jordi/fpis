@@ -200,4 +200,18 @@ class ListSpec extends FlatSpec {
     assert(List.filter(List(1,2,3,4))(_ % 2 == 0) === List(2,4))
   }
 
+  behavior of "flatMap"
+
+  it should "work on the empty list" in {
+    assert(List.flatMap(List())(i => List(i,i)) === List())
+  }
+
+  it should "work on the non empty list" in {
+    assert(List.flatMap(List(1,2,3))(i => List(i,i)) === List(1,1,2,2,3,3))
+  }
+
+  it should "work when f returns some emptuy lists" in {
+    assert(List.flatMap(List(1,2,3))(i => if(i%2 == 0) List() else List(i,i)) === List(1,1,3,3))
+  }
+
 }
