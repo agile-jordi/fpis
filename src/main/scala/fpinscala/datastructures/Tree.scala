@@ -24,10 +24,17 @@ object Tree{
   }
 
   def max(tree:Tree[Int]):Int = {
-    tree match {
-      case Leaf(n) => n
-      case Branch(l,r) => max(l) max max(r)
+
+    @tailrec
+    def loop(t1:Tree[Int], acc:(List[Tree[Int]], Option[Int])):Int = {
+      (t1,acc) match {
+        case (Leaf(n),(Nil,m)) => n max m.getOrElse(n)
+        case (Leaf(n),(Cons(h,t),m)) => loop(h,(t,Some(n max m.getOrElse(n))))
+        case (Branch(l,r),(pt,m)) => loop(l,(Cons(r,pt),m))
+      }
     }
+
+    loop(tree,(List(),None))
 
   }
 }
