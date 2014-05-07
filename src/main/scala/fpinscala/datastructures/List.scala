@@ -122,15 +122,19 @@ object List {
 
   def filterViaFlatMap[A](l: List[A])(f: A => Boolean): List[A] = List.flatMap(l)(e => if(f(e)) List(e) else List())
 
-  def add(l1:List[Int], l2:List[Int]):List[Int] = {
+  def add(l1:List[Int], l2:List[Int]):List[Int] = combine(l1,l2)(_ + _)
+
+  def combine[A,B,C](l1:List[A], l2:List[B])(f: (A,B) => C):List[C] = {
 
     @tailrec
-    def loop(l1:List[Int], l2:List[Int], acc:List[Int]):List[Int] = {
+    def loop(l1:List[A], l2:List[B], acc:List[C]):List[C] = {
       (l1, l2) match {
-        case (Cons(h1, t1), Cons(h2, t2)) => loop(t1,t2,Cons(h1+h2,acc))
+        case (Cons(h1, t1), Cons(h2, t2)) => loop(t1,t2,Cons(f(h1,h2),acc))
         case _ => acc
       }
     }
     List.reverse(loop(l1,l2,List()))
+
   }
+
 }

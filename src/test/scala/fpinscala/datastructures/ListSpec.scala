@@ -222,7 +222,7 @@ class ListSpec extends FlatSpec {
 
   behavior of "add"
 
-  it should "add the elements in two emptuy lists" in{
+  it should "add the elements in two empty lists" in{
     assert(List.add(List(),List()) === List())
   }
 
@@ -232,6 +232,16 @@ class ListSpec extends FlatSpec {
 
   it should "add two lists with different lenghts" in{
     assert(List.add(List(1,2,3),List(4,5)) === List(5,7))
+  }
+
+  behavior of "combine"
+
+  it should "combine elements in two empty lists" in{
+    assert(List.combine(List[String](),List[Int]())((s,i) => s + " -> " + i) === List())
+  }
+
+  it should "combine two lists with the same length" in{
+    assert(List.combine(List("i","ii"),List(1,2))((s,i) => s + " -> " + i) === List("i -> 1","ii -> 2"))
   }
 
 
