@@ -22,4 +22,12 @@ object Tree{
     loop(tree,(List(),0))
 
   }
+
+  def max(tree:Tree[Int]):Int = {
+    tree match {
+      case Leaf(n) => n
+      case Branch(l,r) => max(l) max max(r)
+    }
+
+  }
 }
