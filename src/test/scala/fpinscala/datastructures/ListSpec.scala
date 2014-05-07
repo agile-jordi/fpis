@@ -244,5 +244,51 @@ class ListSpec extends FlatSpec {
     assert(List.combine(List("i","ii"),List(1,2))((s,i) => s + " -> " + i) === List("i -> 1","ii -> 2"))
   }
 
+  behavior of "startsWith"
 
+  it should "calculate for the empty list" in {
+    assert(List.startsWith(List(),List(1,2)) === false)
+  }
+
+  it should "calculate for the empty prefix" in {
+    assert(List.startsWith(List(1,2),List()) === true)
+  }
+
+  it should "calculate for the empty list and prefix" in {
+    assert(List.startsWith(List(),List()) === true)
+  }
+
+  it should "calculate for the non empty list and a non empty correct prefix" in{
+    assert(List.startsWith(List(1,2,4,5),List(1,2)) === true)
+  }
+
+  it should "calculate for the non empty list and a false non empty prefix" in {
+    assert(List.startsWith(List(1,2,3,4), List(1,5)) === false)
+  }
+
+  behavior of "hasSubsequence"
+
+  it should "calculate for the empty list" in {
+    assert(List.hasSubsequence(List(),List(1)) === false)
+  }
+
+  it should "calculate for the empty subsequence" in {
+    assert(List.hasSubsequence(List(1,2,3),List()) === true)
+  }
+
+  it should "calculate for the empty list and subsequence" in {
+    assert(List.hasSubsequence(List(),List()) === true)
+  }
+
+  it should "calculate for the non empty list and a non empty prefix" in {
+    assert(List.hasSubsequence(List(1,2,4,5),List(1,2)) === true)
+  }
+
+  it should "calculate for the non empty list and non empty subsequence that is not a prefix" in {
+    assert(List.hasSubsequence(List(1,2,4,5),List(2,4)) === true)
+  }
+
+  it should "calculate for the non empty list and a list which is not a subsequence" in{
+    assert(List.hasSubsequence(List(1,2,4,5), List(1,4)) === false)
+  }
 }

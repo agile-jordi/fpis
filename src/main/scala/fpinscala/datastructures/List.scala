@@ -137,4 +137,21 @@ object List {
 
   }
 
+  @tailrec
+  def startsWith[A](l:List[A], prefix:List[A]):Boolean = {
+    (l, prefix) match {
+      case (Nil, Nil) => true
+      case (Nil, _) => false
+      case (Cons(_, _), Nil) => true
+      case (Cons(h1, t1), Cons(h2, t2)) if h1 == h2 => startsWith(t1, t2)
+      case _ => false
+    }
+  }
+
+  @tailrec
+  def hasSubsequence[A](list: List[A], sub: List[A]): Boolean = (list,sub) match {
+    case (l,s) if startsWith(l,s) => true
+    case (Nil,_) => false
+    case (Cons(h1,t1),s) => hasSubsequence(t1,s)
+  }
 }
