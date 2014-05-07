@@ -24,4 +24,9 @@ object Tree{
   def size[A](tree:Tree[A]):Int = fold(tree,0)((_,acc) => acc+1)
 
   def max(tree:Tree[Int]):Int = fold[Int,Option[Int]](tree,None)((e,acc) => Some(e max acc.getOrElse(e))).get
+
+  def depth[A](tree:Tree[A]):Int = tree match{
+    case Leaf(_) => 1
+    case Branch(l,r) => (depth(l) max depth(r)) + 1
+  }
 }
