@@ -118,4 +118,6 @@ object List {
   def filter[A](l: List[A])(f: A => Boolean): List[A] = List.foldRight(l, List[A]())((e,acc) => if(f(e)) Cons(e,acc) else acc)
 
   def flatMap[A,B](l: List[A])(f: A => List[B]): List[B] = List.foldLeft(l, List[B]())((acc,e) => List.append(acc,f(e)))
+
+  def filterViaFlatMap[A](l: List[A])(f: A => Boolean): List[A] = List.flatMap(l)(e => if(f(e)) List(e) else List())
 }

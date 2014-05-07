@@ -214,4 +214,11 @@ class ListSpec extends FlatSpec {
     assert(List.flatMap(List(1,2,3))(i => if(i%2 == 0) List() else List(i,i)) === List(1,1,3,3))
   }
 
+  behavior of "filterViaFlatMap"
+
+  it should "filter elements from a non empty list" in {
+    assert(List.filterViaFlatMap(List(1,2,3,4))(_ % 2 == 0) === List(2,4))
+  }
+
+
 }
