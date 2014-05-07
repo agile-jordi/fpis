@@ -82,6 +82,7 @@ object List {
 
   def length[A](l: List[A]): Int = foldRight(l, 0)((_, acc) => acc + 1)
 
+  @tailrec
   def foldLeft[A,B](l: List[A], z: B)(f: (B, A) => B): B = {
     l match {
       case Nil => z
@@ -123,12 +124,13 @@ object List {
 
   def add(l1:List[Int], l2:List[Int]):List[Int] = {
 
-    def loop(l1:List[Int], l2:List[Int]):List[Int] = {
+    @tailrec
+    def loop(l1:List[Int], l2:List[Int], acc:List[Int]):List[Int] = {
       (l1, l2) match {
-        case (Cons(h1, t1), Cons(h2, t2)) => Cons(h1 + h2,loop(t1, t2))
-        case _ => Nil
+        case (Cons(h1, t1), Cons(h2, t2)) => loop(t1,t2,Cons(h1+h2,acc))
+        case _ => acc
       }
     }
-    loop(l1,l2)
+    List.reverse(loop(l1,l2,List()))
   }
 }
