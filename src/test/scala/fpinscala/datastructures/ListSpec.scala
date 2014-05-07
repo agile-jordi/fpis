@@ -190,4 +190,14 @@ class ListSpec extends FlatSpec {
     assert(List.map(List(1.1,1.2,1.3))(_.toString) === List("1.1","1.2","1.3"))
   }
 
+  behavior of "filter"
+
+  it should "filter elements from an empty list" in{
+    assert(List.filter(List[Int]())(_ > 0) === List())
+  }
+
+  it should "filter elements from a non empty list" in {
+    assert(List.filter(List(1,2,3,4))(_ % 2 == 0) === List(2,4))
+  }
+
 }
