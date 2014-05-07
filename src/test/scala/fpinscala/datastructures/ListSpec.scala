@@ -220,5 +220,19 @@ class ListSpec extends FlatSpec {
     assert(List.filterViaFlatMap(List(1,2,3,4))(_ % 2 == 0) === List(2,4))
   }
 
+  behavior of "add"
+
+  it should "add the elements in two emptuy lists" in{
+    assert(List.add(List(),List()) === List())
+  }
+
+  it should "add two lists with the same length" in {
+    assert(List.add(List(1,2,3),List(4,5,6)) === List(5,7,9))
+  }
+
+  it should "add two lists with different lenghts" in{
+    assert(List.add(List(1,2,3),List(4,5)) === List(5,7))
+  }
+
 
 }

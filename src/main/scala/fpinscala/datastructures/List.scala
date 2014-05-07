@@ -120,4 +120,15 @@ object List {
   def flatMap[A,B](l: List[A])(f: A => List[B]): List[B] = List.foldLeft(l, List[B]())((acc,e) => List.append(acc,f(e)))
 
   def filterViaFlatMap[A](l: List[A])(f: A => Boolean): List[A] = List.flatMap(l)(e => if(f(e)) List(e) else List())
+
+  def add(l1:List[Int], l2:List[Int]):List[Int] = {
+
+    def loop(l1:List[Int], l2:List[Int]):List[Int] = {
+      (l1, l2) match {
+        case (Cons(h1, t1), Cons(h2, t2)) => Cons(h1 + h2,loop(t1, t2))
+        case _ => Nil
+      }
+    }
+    loop(l1,l2)
+  }
 }
