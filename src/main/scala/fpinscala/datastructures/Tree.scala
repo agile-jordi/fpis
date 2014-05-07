@@ -8,33 +8,20 @@ case class Branch[A](left: Tree[A], right: Tree[A]) extends Tree[A]
 
 object Tree{
 
-  def size[A](tree:Tree[A]):Int = {
-
+  def fold[A,B](tree:Tree[A], z:B)(f: (A,B) => B):B = {
     @tailrec
-    def loop(t1:Tree[A], acc:(List[Tree[A]], Int)):Int = {
+    def loop(t1:Tree[A], acc:(List[Tree[A]], B)):B = {
       (t1,acc) match {
-        case (Leaf(_),(Nil,s)) => s + 1
-        case (Leaf(_),(Cons(h,t),s)) => loop(h,(t,s+1))
-        case (Branch(l,r),(pt,s)) => loop(l,(Cons(r,pt),s))
+        case (Leaf(n),(Nil,b)) => f(n,b)
+        case (Leaf(n),(Cons(h,t),b)) => loop(h,(t,f(n,b)))
+        case (Branch(l,r),(pt,b)) => loop(l,(Cons(r,pt),b))
       }
     }
 
-    loop(tree,(List(),0))
-
+    loop(tree,(List(),z))
   }
 
-  def max(tree:Tree[Int]):Int = {
+  def size[A](tree:Tree[A]):Int = fold(tree,0)((_,acc) => acc+1)
 
-    @tailrec
-    def loop(t1:Tree[Int], acc:(List[Tree[Int]], Option[Int])):Int = {
-      (t1,acc) match {
-        case (Leaf(n),(Nil,m)) => n max m.getOrElse(n)
-        case (Leaf(n),(Cons(h,t),m)) => loop(h,(t,Some(n max m.getOrElse(n))))
-        case (Branch(l,r),(pt,m)) => loop(l,(Cons(r,pt),m))
-      }
-    }
-
-    loop(tree,(List(),None))
-
-  }
+  def max(tree:Tree[Int]):Int = fold[Int,Option[Int]](tree,None)((e,acc) => Some(e max acc.getOrElse(e))).get
 }
