@@ -21,9 +21,11 @@ object Tree{
     loop(tree,(List(),z))
   }
 
-  def fold[A,B](tree:Tree[A])(z:(A) => B)(f:(B,B)=>B):B = tree match {
-    case Leaf(a) => z(a)
-    case Branch(l,r) => f(fold(l)(z)(f),fold(r)(z)(f))
+  def fold[A,B](tree:Tree[A])(z:(A) => B)(f:(B,B)=>B):B = {
+    tree match {
+      case Leaf(a) => z(a)
+      case Branch(l,r) => f(fold(l)(z)(f),fold(r)(z)(f))
+    }
   }
 
   def size[A](tree:Tree[A]):Int = fold(tree)(_ => 1)(_ + _)
@@ -31,4 +33,6 @@ object Tree{
   def max(tree:Tree[Int]):Int = fold(tree)(l => l)(_ max _)
 
   def depth[A](tree:Tree[A]):Int = fold[A,Int](tree)(_ => 1)((l,r) => (l max r) + 1)
+
+  def map[A,B](tree:Tree[A])(f:(A) => B):Tree[B] = fold[A,Tree[B]](tree)(l => Leaf(f(l)))((l,r)=>Branch(l,r))
 }

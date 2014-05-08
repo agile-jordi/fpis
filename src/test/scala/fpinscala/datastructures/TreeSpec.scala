@@ -33,4 +33,14 @@ class TreeSpec extends FlatSpec {
   it should "calculate for a branch" in {
     assert(Tree.depth(Branch(Leaf(3),Branch(Leaf(4),Leaf(3)))) === 3)
   }
+
+  behavior of "map"
+
+  it should "calculate for a leaf" in {
+    assert(Tree.map(Leaf(3))(_ + 1) === Leaf(4))
+  }
+
+  it should "calculate for a branch" in{
+    assert(Tree.map(Branch(Leaf(3),Branch(Leaf(4),Leaf(3))))(_ + 1) === Branch(Leaf(4),Branch(Leaf(5),Leaf(4))))
+  }
 }
