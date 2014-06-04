@@ -1,6 +1,8 @@
 package fpinscala.errors
 
 import org.scalatest.FlatSpec
+import fpinscala.datastructures.List
+import scala.util.control.NonFatal
 
 class EitherSpec extends FlatSpec{
 
@@ -62,5 +64,45 @@ class EitherSpec extends FlatSpec{
     val no:Either[String,String] = Left("No!")
     assert(wrong.map2(no)(_ + _) === wrong)
   }
+
+  behavior of "traverse"
+
+  import Either.traverse
+
+  private val parseInt:(String => Either[String,Int]) = (s:String) => try{
+    Right(s.toInt)
+  } catch {
+    case NonFatal(_) => Left(s"$s is not an int")
+  }
+
+  it should "traverse an empty list" in{
+    assert(traverse(List.apply[String]())(parseInt) === Right(List.apply[String]()))
+  }
+
+  it should "traverse a non empty list with no errors" in{
+    assert(traverse(List("1","2","3"))(parseInt) === Right(List(1,2,3)))
+  }
+
+  it should "traverse a non empty list and return the first error" in {
+    assert(traverse(List("1","2","a","b"))(parseInt) === Left("a is not an int"))
+  }
+
+  behavior of "sequence"
+
+  import Either.sequence
+
+  it should "sequence an empty list" in{
+    assert(sequence(List.apply[Either[String,Int]]()) === Right(List.apply[Either[String,Int]]()))
+  }
+
+  it should "sequence a non empty list with no errors" in{
+    assert(sequence(List(Right(1),Right(2),Right(3))) === Right(List(1,2,3)))
+  }
+
+  it should "sequence a non empty list and return the first error" in {
+    assert(sequence(List(Right(1),Right(2),Left("a is not an int"),Left("b is not an int"))) === Left("a is not an int"))
+  }
+
+
 
 }

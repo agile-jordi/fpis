@@ -1,5 +1,8 @@
 package fpinscala.errors
 
+import scala.annotation.tailrec
+import fpinscala.datastructures.{Cons, Nil, List}
+
 sealed trait Either[+E, +A] {
   def map[B](f: A => B): Either[E, B]
 
@@ -35,4 +38,22 @@ object Either {
     catch {
       case e: Exception => Left(e)
     }
+
+  def sequence[E, A](es: List[Either[E, A]]): Either[E, List[A]] = traverse(es)(identity)
+
+  def traverse[E, A, B](l: List[A])(f: A => Either[E, B]): Either[E, List[B]] = {
+    @tailrec
+    def loop(l: List[A], acc: List[B]): Either[E,List[B]] = l match {
+      case Nil => Right(List.reverse(acc))
+      case Cons(a, as) => {
+        val ob = f(a)
+        ob match {
+          case Right(b) => loop(as, Cons(b, acc))
+          case Left(e) => Left(e)
+        }
+      }
+    }
+    loop(l, List())
+
+  }
 }
