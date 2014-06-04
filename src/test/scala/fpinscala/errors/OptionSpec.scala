@@ -41,5 +41,25 @@ class OptionSpec extends FlatSpec{
     assert(None.orElse(Some("World")) === Some("World"))
   }
 
+  behavior of "map2"
+
+  import Option.map2
+
+  private val concat: (String,String) => String = _ + _
+
+  it should "map over no values" in {
+    assert(map2(None,None)(concat) === None)
+  }
+
+  it should "map over just one value" in {
+    assert(map2(None,Some("World"))(concat) === None)
+    assert(map2(Some("Hello"),None)(concat) === None)
+  }
+
+  it should "map over two values" in{
+    assert(map2(Some("Hello "),Some("World"))(concat) === Some("Hello World"))
+  }
+
+
 
 }
