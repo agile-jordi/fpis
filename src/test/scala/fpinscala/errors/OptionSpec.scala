@@ -1,6 +1,7 @@
 package fpinscala.errors
 
 import org.scalatest.FlatSpec
+import fpinscala.datastructures.List
 
 class OptionSpec extends FlatSpec{
 
@@ -60,6 +61,21 @@ class OptionSpec extends FlatSpec{
     assert(map2(Some("Hello "),Some("World"))(concat) === Some("Hello World"))
   }
 
+  behavior of "sequence"
+
+  import Option.sequence
+
+  it should "return the empty list for the empty list" in{
+    assert(sequence(List.apply[Option[String]]()) === Some(List()))
+  }
+
+  it should "return None if the list contains a None" in {
+    assert(sequence(List(Some(1),Some(2), None, Some(3))) === None)
+  }
+
+  it should "return the list if all the elements in the list are defined" in {
+    assert(sequence(List(Some(1),Some(2), Some(3))) === Some(List(1,2,3)))
+  }
 
 
 }
