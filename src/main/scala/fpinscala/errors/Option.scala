@@ -2,8 +2,9 @@ package fpinscala.errors
 
 import scala.util.control.NonFatal
 import fpinscala.datastructures.{Cons, Nil, List}
+import scala.annotation.tailrec
 
-trait Option[+A] {
+sealed trait Option[+A] {
   def map[B](f: A => B): Option[B]
   def flatMap[B](f: A => Option[B]): Option[B]
   def getOrElse[B >: A](default: => B): B
@@ -22,9 +23,14 @@ object Option{
   def map2[A,B,C](a: Option[A], b: Option[B])(f: (A, B) => C): Option[C] =
   a.flatMap(aa => b.map(bb => f(aa,bb)))
 
-  def sequence[A](a: List[Option[A]]): Option[List[A]] = a match {
-    case Nil => Some(Nil)
-    case Cons(ox,xs) => ox.flatMap(x => sequence(xs).map(axs => Cons(x,axs)))
+  def sequence[A](a: List[Option[A]]): Option[List[A]] = {
+    @tailrec
+    def loop(a:List[Option[A]], acc:List[A]):Option[List[A]]  = a match {
+      case Nil => Some(List.reverse(acc))
+      case Cons(None,xs) => None
+      case Cons(Some(x),xs) => loop(xs,Cons(x,acc))
+    }
+    loop(a,List())
   }
 }
 
