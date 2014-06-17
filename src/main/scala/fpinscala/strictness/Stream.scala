@@ -3,6 +3,9 @@ package fpinscala.strictness
 import scala.annotation.tailrec
 
 sealed trait Stream[+A] {
+
+  import Stream._
+
   def headOption: Option[A] = this match {
     case Empty => None
     case Cons(h, t) => Some(h())
@@ -12,7 +15,7 @@ sealed trait Stream[+A] {
 
     @tailrec
     def loop(s: Stream[A], acc: List[A]): List[A] = s match {
-      case Empty => acc
+      case Empty => acc.reverse
       case Cons(h, t) => loop(t(), h() :: acc)
     }
 
@@ -40,6 +43,14 @@ sealed trait Stream[+A] {
     }
 
     loop(this,n)
+  }
+
+  def takeWhile(p: A => Boolean): Stream[A] = this match {
+    case Empty => Empty
+    case Cons(h,t) =>
+      val h1 = h()
+      if(p(h1)) cons(h1,t().takeWhile(p))
+      else Empty
   }
 }
 
