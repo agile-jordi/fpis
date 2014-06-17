@@ -5,6 +5,8 @@ import Stream._
 
 class StreamSpec extends FlatSpec {
 
+  def from(n:Int):Stream[Int] = cons(n, from(n+1))
+
   behavior of "toList"
 
   it should "return the empty list for an empty stream" in {
@@ -34,6 +36,10 @@ class StreamSpec extends FlatSpec {
     assert(Stream(23, 42).take(2).toList === List(23, 42))
   }
 
+  it should "take some elements from an infinite stream" in {
+    assert(from(23).take(3).toList === List(23,24,25))
+  }
+
   behavior of "drop"
 
   it should "drop from the empty stream" in {
@@ -48,6 +54,10 @@ class StreamSpec extends FlatSpec {
     assert(Stream(23).drop(5).toList === List())
   }
 
+  it should "drop from the infinite stream" in {
+    assert(from(23).drop(5).take(3).toList === List(28,29,30))
+  }
+
   behavior of "takeWhile"
 
   it should "take from the empty stream" in {
@@ -60,6 +70,10 @@ class StreamSpec extends FlatSpec {
 
   it should "take from the non empty stream while the predicate holds" in {
     assert(Stream(2, 4, 5).takeWhile(_ % 2 == 0).toList === List(2, 4))
+  }
+
+  it should "take from the infinite stream while the predicate holds" in {
+    assert(from(23).takeWhile(_ < 25).toList === List(23,24))
   }
 
 }
