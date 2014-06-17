@@ -90,4 +90,14 @@ class StreamSpec extends FlatSpec {
     assert(from(23).forAll(_ < 30) === false)
   }
 
+  behavior of "headOption"
+
+  it should "return None for the empty stream" in {
+    assert(Stream().headOption === None)
+  }
+
+  it should "return the head of a non empty stream" in{
+    assert(from(23).headOption === Some(23))
+  }
+
 }

@@ -6,10 +6,7 @@ sealed trait Stream[+A] {
 
   import Stream._
 
-  def headOption: Option[A] = this match {
-    case Empty => None
-    case Cons(h, t) => Some(h())
-  }
+  def headOption: Option[A] = foldRight[Option[A]](None)((elem,_) => Some(elem))
 
   def toList: List[A] = {
 
@@ -51,6 +48,7 @@ sealed trait Stream[+A] {
     }
 
   def forAll(p: A => Boolean): Boolean = foldRight(true)((elem,b) => p(elem) && b)
+
 }
 
 case object Empty extends Stream[Nothing]
