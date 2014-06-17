@@ -40,13 +40,7 @@ sealed trait Stream[+A] {
     loop(this, n)
   }
 
-  def takeWhile(p: A => Boolean): Stream[A] = this match {
-    case Empty => Empty
-    case Cons(h, t) =>
-      val h1 = h()
-      if (p(h1)) cons(h1, t().takeWhile(p))
-      else Empty
-  }
+  def takeWhile(p: A => Boolean): Stream[A] = foldRight(empty[A])((elem,acc) => if(p(elem)) cons(elem,acc) else empty[A])
 
   def exists(p: A => Boolean): Boolean = foldRight(false)((elem, b) => p(elem) || b)
 
