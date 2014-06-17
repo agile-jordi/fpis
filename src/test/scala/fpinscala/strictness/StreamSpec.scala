@@ -23,15 +23,15 @@ class StreamSpec extends FlatSpec {
   behavior of "take"
 
   it should "return the empty list for the empty stream" in {
-    assert(empty.take(2) === List())
+    assert(empty.take(2).toList === List())
   }
 
   it should "return the first element of a non empty stream" in {
-    assert(cons(23, empty).take(1) === List(23))
+    assert(cons(23, empty).take(1).toList === List(23))
   }
 
   it should "return the first elements if we ask more than it has" in {
-    assert(cons(23, cons(42, empty)).take(2) === List(23, 42))
+    assert(cons(23, cons(42, empty)).take(2).toList === List(23, 42))
   }
 
   behavior of "drop"

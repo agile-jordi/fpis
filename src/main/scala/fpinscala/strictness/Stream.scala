@@ -22,34 +22,29 @@ sealed trait Stream[+A] {
     loop(this, List.empty[A])
   }
 
-  def take(n: Int): List[A] = {
-
-    @tailrec
-    def loop(s:Stream[A], i:Int, acc:List[A]):List[A] = s match {
-      case Cons(h,t) if i>0 => loop(t(),i-1,h() :: acc)
-      case _ => acc.reverse
-    }
-
-    loop(this,n,List.empty[A])
-
+  def take(n: Int): Stream[A] = this match {
+    case Empty => Empty
+    case _ if n <= 0 => Empty
+    case Cons(h, t) if n > 0 => cons(h(), t().take(n - 1))
   }
+
 
   def drop(n: Int): Stream[A] = {
 
     @tailrec
-    def loop(s:Stream[A], i:Int):Stream[A] = s match {
-      case Cons(h, t) if i > 0 => loop(t(),i-1)
+    def loop(s: Stream[A], i: Int): Stream[A] = s match {
+      case Cons(h, t) if i > 0 => loop(t(), i - 1)
       case _ => s
     }
 
-    loop(this,n)
+    loop(this, n)
   }
 
   def takeWhile(p: A => Boolean): Stream[A] = this match {
     case Empty => Empty
-    case Cons(h,t) =>
+    case Cons(h, t) =>
       val h1 = h()
-      if(p(h1)) cons(h1,t().takeWhile(p))
+      if (p(h1)) cons(h1, t().takeWhile(p))
       else Empty
   }
 }
