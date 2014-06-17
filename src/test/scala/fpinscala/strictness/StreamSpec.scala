@@ -5,7 +5,7 @@ import Stream._
 
 class StreamSpec extends FlatSpec {
 
-  def from(n:Int):Stream[Int] = cons(n, from(n+1))
+  def from(n: Int): Stream[Int] = cons(n, from(n + 1))
 
   behavior of "toList"
 
@@ -37,7 +37,7 @@ class StreamSpec extends FlatSpec {
   }
 
   it should "take some elements from an infinite stream" in {
-    assert(from(23).take(3).toList === List(23,24,25))
+    assert(from(23).take(3).toList === List(23, 24, 25))
   }
 
   behavior of "drop"
@@ -50,12 +50,12 @@ class StreamSpec extends FlatSpec {
     assert(Stream(23, 42).drop(1).toList === List(42))
   }
 
-  it should "dr8op from the non empty stream but only until it is empty" in {
+  it should "drop from the non empty stream but only until it is empty" in {
     assert(Stream(23).drop(5).toList === List())
   }
 
   it should "drop from the infinite stream" in {
-    assert(from(23).drop(5).take(3).toList === List(28,29,30))
+    assert(from(23).drop(5).take(3).toList === List(28, 29, 30))
   }
 
   behavior of "takeWhile"
@@ -73,7 +73,21 @@ class StreamSpec extends FlatSpec {
   }
 
   it should "take from the infinite stream while the predicate holds" in {
-    assert(from(23).takeWhile(_ < 25).toList === List(23,24))
+    assert(from(23).takeWhile(_ < 25).toList === List(23, 24))
+  }
+
+  behavior of "forall"
+
+  it should "return true for the empty stream" in {
+    assert(Stream().forAll(_ => false) === true)
+  }
+
+  it should "return true for some finite stream" in {
+    assert(Stream(2,4,6).forAll(_ % 2 == 0) === true)
+  }
+
+  it should "return false failing fast" in {
+    assert(from(23).forAll(_ < 30) === false)
   }
 
 }

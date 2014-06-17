@@ -47,6 +47,16 @@ sealed trait Stream[+A] {
       if (p(h1)) cons(h1, t().takeWhile(p))
       else Empty
   }
+
+  def exists(p: A => Boolean): Boolean = foldRight(false)((elem, b) => p(elem) || b)
+
+  def foldRight[B](z: => B)(f: (A, => B) => B): B =
+    this match {
+      case Cons(h, t) => f(h(), t().foldRight(z)(f))
+      case _ => z
+    }
+
+  def forAll(p: A => Boolean): Boolean = foldRight(true)((elem,b) => p(elem) && b)
 }
 
 case object Empty extends Stream[Nothing]
