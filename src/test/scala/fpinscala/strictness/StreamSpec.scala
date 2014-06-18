@@ -7,6 +7,8 @@ class StreamSpec extends FlatSpec {
 
   def from(n: Int): Stream[Int] = cons(n, from(n + 1))
 
+  def range(from:Int, to:Int): Stream[Int] = if(to < from) empty else cons(from, range(from + 1,to))
+
   behavior of "toList"
 
   it should "return the empty list for an empty stream" in {
@@ -98,6 +100,54 @@ class StreamSpec extends FlatSpec {
 
   it should "return the head of a non empty stream" in{
     assert(from(23).headOption === Some(23))
+  }
+
+  behavior of "map"
+
+  it should "map the empty stream" in {
+    assert(Stream().map(_.toString).toList === List())
+  }
+
+  it should "map the infinite stream" in {
+    assert(from(23).map(_ + 2).take(2).toList === List(25,26))
+  }
+
+  behavior of "filter"
+
+  it should "filter the empty stream" in {
+    assert(Stream[Int]().filter(_ > 24).toList === List())
+  }
+
+  it should "filter the infinite stream" in {
+    assert(from(23).filter(_ % 2 == 0).take(2).toList === List(24,26))
+  }
+
+  behavior of "append"
+
+  it should "append an empty stream to an empty stream" in {
+    assert(Stream[Int]().append(Stream[Int]()).toList === List())
+  }
+
+  it should "append a non empty stream to an empty stream" in{
+    assert(Stream[Int]().append(from(23)).take(2).toList === List(23,24))
+  }
+
+  it should "append a non empty stream to a non empty stream" in {
+    assert(Stream(1,2,3).append(from(23)).take(5).toList === List(1,2,3,23,24))
+  }
+
+  it should "not evaluate the stream to append if not needed" in {
+    assert(from(23).append(throw new RuntimeException("No!")).take(2).toList === List(23,24))
+  }
+
+  behavior of "flatMap"
+
+  it should "flatMap over an empty sream" in {
+    assert(Stream[Int]().flatMap(from).toList === List())
+  }
+
+  it should "flatMap over a non empty stream" in {
+    assert(range(2,3).flatMap(i => range(i,i+2)).toList === List(2,3,4,3,4,5))
   }
 
 }
