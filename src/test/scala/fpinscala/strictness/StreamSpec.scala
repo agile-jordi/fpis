@@ -150,4 +150,10 @@ class StreamSpec extends FlatSpec {
     assert(range(2,3).flatMap(i => range(i,i+2)).toList === List(2,3,4,3,4,5))
   }
 
+  behavior of "constant"
+
+  it should "well... be constant" in{
+    assert(constant("a").drop(5).take(5).toList.mkString("") === "aaaaa")
+  }
+
 }
