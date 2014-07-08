@@ -5,8 +5,6 @@ import Stream._
 
 class StreamSpec extends FlatSpec {
 
-  def from(n: Int): Stream[Int] = cons(n, from(n + 1))
-
   def range(from:Int, to:Int): Stream[Int] = if(to < from) empty else cons(from, range(from + 1,to))
 
   behavior of "toList"
