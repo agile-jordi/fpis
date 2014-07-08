@@ -154,4 +154,10 @@ class StreamSpec extends FlatSpec {
     assert(constant("a").drop(5).take(5).toList.mkString("") === "aaaaa")
   }
 
+  behavior of "fibs"
+
+  it should "calculate the fibonacci sequence" in {
+    assert(fibs.take(10).toList === List(0,1,1,2,3,5,8,13,21,34))
+  }
+
 }
