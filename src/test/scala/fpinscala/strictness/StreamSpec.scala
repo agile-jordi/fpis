@@ -160,4 +160,15 @@ class StreamSpec extends FlatSpec {
     assert(fibs.take(10).toList === List(0,1,1,2,3,5,8,13,21,34))
   }
 
+  behavior of "unfold"
+
+  it should "stop if needed" in {
+    def range2(from:Int, to:Int) = unfold((from,to)){
+      case (f,t) if f <= t => Some(f, (f+1,t))
+      case _ => None
+    }
+
+    assert(range(3,8).toList === range(3,8).toList)
+  }
+
 }

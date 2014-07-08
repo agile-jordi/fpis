@@ -75,12 +75,14 @@ object Stream {
   def apply[A](as: A*): Stream[A] =
     if (as.isEmpty) empty else cons(as.head, apply(as.tail: _*))
 
-  def constant[A](a: A): Stream[A] = cons(a,constant(a))
+  def constant[A](a: A): Stream[A] = unfold(a)(s => Some(s,s))
 
-  def from(n: Int): Stream[Int] = cons(n, from(n + 1))
+  def from(n: Int): Stream[Int] = unfold(n)(s => Some(s,s+1))
 
-  def fibs = {
-    def fibs(prev2:Int,prev1:Int):Stream[Int] = cons(prev2+prev1, fibs(prev1, prev2+prev1))
-    cons(0,cons(1,fibs(0,1)))
+  def fibs = cons(0,cons(1,unfold((0,1)){case (prev2,prev1) => Some(prev2+prev1, (prev1,prev2+prev1))}))
+
+  def unfold[A, S](z: S)(f: S => Option[(A, S)]): Stream[A] = f(z) match {
+    case Some((a,s)) => cons(a,unfold(s)(f))
+    case None => Empty
   }
 }
