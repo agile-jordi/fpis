@@ -175,7 +175,32 @@ class StreamSpec extends FlatSpec {
 
   it should "constantly return 1" in {
     assert(ones.take(6).toList === List(1,1,1,1,1,1))
+  }
 
+  behavior of "zipWith"
+
+  import Stream.zipWith
+
+  it should "zip 2 empty streams" in {
+    assert(zipWith(empty[Int],empty[Int])(_+_).toList === List.empty[Int])
+  }
+
+  it should "zip an empty stream with a non empty stream" in {
+    assert(zipWith(empty[Int], constant(3))(_+_).toList === List.empty[Int])
+  }
+
+  it should "zip two non empty streams" in {
+    assert(zipWith(constant(1),from(4))(_+_).take(3).toList === List(5,6,7))
+  }
+
+  behavior of "zipAll"
+
+  it should "zip 2 empty streams" in {
+    assert(empty[Int].zipAll(empty[Int]).toList === List.empty)
+  }
+
+  it should "zip a finite stream with an infinite stream" in {
+    assert(Stream(1,2).zipAll(constant(4)).take(3).toList === List(Some(1)->Some(4),Some(2)->Some(4),None->Some(4)))
   }
 
 }
