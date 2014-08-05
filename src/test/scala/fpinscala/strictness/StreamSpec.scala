@@ -225,5 +225,15 @@ class StreamSpec extends FlatSpec {
     assert(from(4).startsWith(Stream(4,5,8)) === false)
   }
 
+  behavior of "tails"
+
+  it should "return the tails of the empty stream" in {
+    assert(empty[Int].tails.map(_.toList).toList === List(List.empty))
+  }
+
+  it should "return the tails of a finite stream" in {
+    assert(Stream(1,2,3).tails.map(_.toList).toList === List(List(1,2,3),List(2,3),List(3),List.empty))
+  }
+
 
 }

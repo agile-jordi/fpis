@@ -73,7 +73,7 @@ sealed trait Stream[+A] {
 
   def flatMap[B](f: A => Stream[B]):Stream[B] = foldRight(empty[B])((elem,acc) => f(elem).append(acc))
 
-  def zipAll[B](s2: Stream[B]): Stream[(Option[A],Option[B])] = unfold((this,s2)){
+  def zipAll[B](s: Stream[B]): Stream[(Option[A],Option[B])] = unfold((this,s)){
     case (Empty,Empty) => None
     case (s1,s2) => Some((s1.headOption,s2.headOption),(s1.drop(1),s2.drop(1)))
   }
@@ -81,6 +81,11 @@ sealed trait Stream[+A] {
   def startsWith[B](s: Stream[B]): Boolean = this.zipAll(s).takeWhile(_._2.nonEmpty).forAll{
     case (e1,e2) => e1 == e2
   }
+
+  def tails: Stream[Stream[A]] = unfold(this){
+    case s@Cons(h,t) => Some(s,t())
+    case Empty => None
+  }.append(Stream(empty))
 
 }
 
