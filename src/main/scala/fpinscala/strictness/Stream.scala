@@ -77,6 +77,8 @@ object Stream {
 
   def constant[A](a: A): Stream[A] = unfold(a)(s => Some(s,s))
 
+  def ones:Stream[Int] = constant(1)
+
   def from(n: Int): Stream[Int] = unfold(n)(s => Some(s,s+1))
 
   def fibs = cons(0,cons(1,unfold((0,1)){case (prev2,prev1) => Some(prev2+prev1, (prev1,prev2+prev1))}))

@@ -171,4 +171,11 @@ class StreamSpec extends FlatSpec {
     assert(range(3,8).toList === range(3,8).toList)
   }
 
+  behavior of "ones"
+
+  it should "constantly return 1" in {
+    assert(ones.take(6).toList === List(1,1,1,1,1,1))
+
+  }
+
 }
