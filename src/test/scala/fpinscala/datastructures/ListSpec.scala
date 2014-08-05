@@ -108,7 +108,6 @@ class ListSpec extends FlatSpec {
       fail("StackOverflowError expected")
     }catch{
       case s:StackOverflowError => // Ok
-      case _ => fail("StackOverflowError expected")
     }
   }
 
