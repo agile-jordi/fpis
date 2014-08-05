@@ -203,4 +203,27 @@ class StreamSpec extends FlatSpec {
     assert(Stream(1,2).zipAll(constant(4)).take(3).toList === List(Some(1)->Some(4),Some(2)->Some(4),None->Some(4)))
   }
 
+  behavior of "startsWith"
+
+  it should "confirm that a non empty stream starts with the empty stream" in {
+    assert(constant(1).startsWith(empty) === true)
+  }
+
+  it should "confirm that the empty stream starts with the empty stream" in {
+    assert(empty.startsWith(empty) === true)
+  }
+
+  it should "confirm that a non empty stream starts with its preffix" in {
+    assert(from(3).startsWith(Stream(3,4,5)) === true)
+  }
+
+  it should "negate that an empty stream starts with a non empty stream" in {
+    assert(empty.startsWith(Stream(3)) === false)
+  }
+
+  it should "negate that an stream starts with a non-preffix stream" in {
+    assert(from(4).startsWith(Stream(4,5,8)) === false)
+  }
+
+
 }
