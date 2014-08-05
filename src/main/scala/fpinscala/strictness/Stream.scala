@@ -58,6 +58,12 @@ sealed trait Stream[+A] {
       case _ => z
     }
 
+  def scanRight[B](z : => B)(f: (A, => B) => B):Stream[B] = foldRight((z,Stream(z))){
+    (a,b) =>
+      val newValue = f(a,b._1)
+      (newValue, cons(newValue, b._2))
+  }._2
+
   def forAll(p: A => Boolean): Boolean = foldRight(true)((elem,b) => p(elem) && b)
 
   def mapFoldRight[B](f: A => B): Stream[B] = foldRight(empty[B])((elem,acc) => cons(f(elem),acc))
@@ -86,6 +92,10 @@ sealed trait Stream[+A] {
     case s@Cons(h,t) => Some(s,t())
     case Empty => None
   }.append(Stream(empty))
+
+
+  def hasSubsequence[A](s: Stream[A]): Boolean =
+    tails exists (_ startsWith s)
 
 }
 

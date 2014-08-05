@@ -235,5 +235,19 @@ class StreamSpec extends FlatSpec {
     assert(Stream(1,2,3).tails.map(_.toList).toList === List(List(1,2,3),List(2,3),List(3),List.empty))
   }
 
+  behavior of "scanRight"
+
+  it should "scan an empty stream" in {
+    assert(empty[Int].scanRight(0)(_+_).toList === List(0))
+  }
+
+  it should "scan a single element stream" in {
+    assert(Stream(1).scanRight(0)(_+_).toList === List(1,0))
+  }
+
+  it should "scan a three element stream" in {
+    assert(Stream(1,2,3).scanRight(0)(_+_).toList === List(6,5,3,0))
+  }
+
 
 }
