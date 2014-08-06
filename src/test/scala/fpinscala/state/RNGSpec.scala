@@ -62,6 +62,24 @@ class RNGSpec extends FlatSpec {
     assert(d1 !== d2)
   }
 
+  behavior of "intDouble"
+
+  import RNG.intDouble
+  import RNG.int
+
+  it should "generate a pair of int,double with different values" in {
+    val rng = newRng(23)
+    val((i,d),rng3) = intDouble(rng)
+
+    val (_,rng2) = int(rng)
+    assert(i === int(rng)._1)
+    assert(i !== int(rng2)._1)
+    assert(i !== int(rng3)._1)
+    assert(d === double(rng2)._1)
+    assert(d !== double(rng)._1)
+    assert(d !== double(rng3)._1)
+  }
+
   behavior of "double3"
 
   import RNG.double3
