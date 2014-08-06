@@ -44,6 +44,14 @@ object RNG{
     ((d1,d2,d3),rng4)
   }
 
+  def ints(count: Int)(rng: RNG): (List[Int], RNG) = {
+    (1 to count).foldLeft((List.empty[Int],rng)){
+      case ((l,r),i) =>
+        val (i,newRng) = r.nextInt
+        (i :: l,newRng)
+    }
+  }
+
 }
 
 
