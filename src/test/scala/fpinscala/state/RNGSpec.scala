@@ -32,6 +32,12 @@ class RNGSpec extends FlatSpec {
     assert(nonNegativeInt(newRng(Int.MinValue))._1 === Int.MaxValue)
   }
 
+  it should "return the new state" in {
+    val (nni1,rng) = nonNegativeInt(newRng(23))
+    val (nni2,_) = nonNegativeInt(rng)
+    assert(nni1 !== nni2)
+  }
+
   behavior of "double"
 
   import RNG.double
@@ -48,6 +54,28 @@ class RNGSpec extends FlatSpec {
     val res = double(newRng(23))._1
     assert(res > 0d)
     assert(res < 1d)
+  }
+
+  it should "return the new state" in {
+    val (d1,rng) = double(newRng(23))
+    val (d2,_) = double(rng)
+    assert(d1 !== d2)
+  }
+
+  behavior of "double3"
+
+  import RNG.double3
+
+  it should "generate different doubles" in {
+    val rng = newRng(12)
+    val ((d1,d2,d3),rng2) = double3(rng)
+    val d4 = double(rng2)
+    assert(d1 !== d2)
+    assert(d1 !== d3)
+    assert(d1 !== d4)
+    assert(d2 !== d3)
+    assert(d2 !== d4)
+    assert(d3 !== d4)
   }
 
 }
