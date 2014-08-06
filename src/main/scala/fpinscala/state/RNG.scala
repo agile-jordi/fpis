@@ -36,13 +36,10 @@ object RNG{
   def both[A,B](ra: Rand[A], rb: Rand[B]): Rand[(A,B)] =
     map2(ra, rb)((_, _))
 
-  def sequence[A](fs: List[Rand[A]]): Rand[List[A]] = rng => {
-    val (l,r) = fs.foldLeft((List.empty[A],rng)){ case ((l,r),f) =>
-      val (newElement,newState) = f(r)
-      (newElement::l,newState)
+  def sequence[A](fs: List[Rand[A]]): Rand[List[A]] =
+    fs.foldLeft(unit(List.empty[A])) { (acc, f) =>
+      map2(f, acc)(_ :: _)
     }
-    (l.reverse,r)
-  }
 
   def nonNegativeInt(rng: RNG): (Int, RNG) = {
     val (res,nextRng) = rng.nextInt
