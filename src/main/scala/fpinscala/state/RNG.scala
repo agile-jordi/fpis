@@ -33,6 +33,17 @@ object RNG{
     (f(a,b),rng3)
   }
 
+  def both[A,B](ra: Rand[A], rb: Rand[B]): Rand[(A,B)] =
+    map2(ra, rb)((_, _))
+
+  def sequence[A](fs: List[Rand[A]]): Rand[List[A]] = rng => {
+    val (l,r) = fs.foldLeft((List.empty[A],rng)){ case ((l,r),f) =>
+      val (newElement,newState) = f(r)
+      (newElement::l,newState)
+    }
+    (l.reverse,r)
+  }
+
   def nonNegativeInt(rng: RNG): (Int, RNG) = {
     val (res,nextRng) = rng.nextInt
     (if(res < 0) -(res+1) else res,nextRng)
@@ -40,9 +51,9 @@ object RNG{
 
   val double: Rand[Double] = map(nonNegativeInt)(_ / (Int.MaxValue.toDouble + 1))
 
-  val intDouble: Rand[(Int,Double)] = map2(int,double)((_,_))
+  val intDouble: Rand[(Int,Double)] = both(int,double)
 
-  val doubleInt:Rand[(Double,Int)] = map2(double,int)((_,_))
+  val doubleInt:Rand[(Double,Int)] = both(double,int)
 
   def double3(rng: RNG): ((Double,Double,Double), RNG) = {
     val (d1,rng2) = double(rng)
@@ -51,13 +62,7 @@ object RNG{
     ((d1,d2,d3),rng4)
   }
 
-  def ints(count: Int)(rng: RNG): (List[Int], RNG) = {
-    (1 to count).foldLeft((List.empty[Int],rng)){
-      case ((l,r),i) =>
-        val (i,newRng) = r.nextInt
-        (i :: l,newRng)
-    }
-  }
+  def ints(count: Int): Rand[List[Int]] = sequence(List.fill(count)(int))
 
   def nonNegativeEven: Rand[Int] =
     map(nonNegativeInt)(i => i - i % 2)

@@ -101,12 +101,10 @@ class RNGSpec extends FlatSpec {
   import RNG.ints
 
   it should "generate a list of random ints" in {
-    val (l,rng) = ints(2)(newRng(23))
-    val i3 = rng.nextInt
-    assert(l.length === 2)
-    assert(l(0) !== l(1))
-    assert(l(0) !== i3)
-    assert(l(1) !== i3)
+    val (l,rng) = ints(3)(newRng(23))
+    val (i3,_) = rng.nextInt
+    assert(l === List(23,24,25))
+    assert(i3 === 26)
   }
 
 }
