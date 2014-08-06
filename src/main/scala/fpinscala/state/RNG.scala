@@ -20,6 +20,11 @@ object RNG{
     (if(res < 0) -(res+1) else res,rng)
   }
 
+  def double(rng: RNG): (Double, RNG) = {
+    val (i,r) = nonNegativeInt(rng)
+    (i / (Int.MaxValue.toDouble + 1), r)
+  }
+
 }
 
 

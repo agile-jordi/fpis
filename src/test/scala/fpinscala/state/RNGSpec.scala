@@ -32,4 +32,22 @@ class RNGSpec extends FlatSpec {
     assert(nonNegativeInt(newRng(Int.MinValue))._1 === Int.MaxValue)
   }
 
+  behavior of "double"
+
+  import RNG.double
+
+  it should "generate a double up to 1" in {
+    assert(double(newRng(Int.MaxValue))._1 < 1d)
+  }
+
+  it should "generate a double from 0" in {
+    assert(double(newRng(0))._1 === 0d)
+  }
+
+  it should "generate double values, not only integer values" in {
+    val res = double(newRng(23))._1
+    assert(res > 0d)
+    assert(res < 1d)
+  }
+
 }
