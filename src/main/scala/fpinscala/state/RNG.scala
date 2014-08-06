@@ -41,6 +41,11 @@ object RNG{
       map2(f, acc)(_ :: _)
     }
 
+  def flatMap[A,B](f: Rand[A])(g: A => Rand[B]): Rand[B] = rng => {
+    val (a,rng2) = f(rng)
+    g(a)(rng2)
+  }
+
   def nonNegativeInt(rng: RNG): (Int, RNG) = {
     val (res,nextRng) = rng.nextInt
     (if(res < 0) -(res+1) else res,nextRng)
@@ -63,6 +68,11 @@ object RNG{
 
   def nonNegativeEven: Rand[Int] =
     map(nonNegativeInt)(i => i - i % 2)
+
+  def nonNegativeLessThan(n: Int): Rand[Int] = flatMap(nonNegativeInt) { i =>
+    val mod = i % n
+    if (i + (n-1) - mod >= 0) unit(mod) else nonNegativeLessThan(n)
+  }
 }
 
 

@@ -6,7 +6,10 @@ import org.scalatest.FlatSpec
 class RNGSpec extends FlatSpec {
 
   case class DummyRNG(seed:Int) extends RNG {
-    override def nextInt: (Int, RNG) = (seed,DummyRNG(seed+1))
+    override def nextInt: (Int, RNG) = {
+      val newSeed = if(seed == Int.MaxValue) 0 else seed+1
+      (seed,DummyRNG(newSeed))
+    }
   }
 
   private def newRng(nextInt:Int) = DummyRNG(nextInt)
@@ -15,6 +18,14 @@ class RNGSpec extends FlatSpec {
 
   it should "generate a RNG that will deliver the given Int" in{
     assert(newRng(23).nextInt._1 === 23)
+  }
+
+  it should "loop" in {
+    val rng = newRng(Int.MaxValue)
+    val(i,rng2) = rng.nextInt
+    val(i2,_) = rng2.nextInt
+    assert(i === Int.MaxValue)
+    assert(i2 === 0)
   }
 
   behavior of "nonNegativeInt"
@@ -105,6 +116,18 @@ class RNGSpec extends FlatSpec {
     val (i3,_) = rng.nextInt
     assert(l === List(23,24,25))
     assert(i3 === 26)
+  }
+
+  behavior of "nonNegativeLessThan"
+
+  import RNG.nonNegativeLessThan
+
+  it should "retry when generated int is too big" in {
+    val n = 2147483640
+    val rng = newRng(n+2)
+    val (res,rng2) = nonNegativeLessThan(n)(rng)
+    assert(res === 0)
+
   }
 
 }
