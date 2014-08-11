@@ -4,9 +4,9 @@ import org.scalatest.FlatSpec
 import fpinscala.datastructures.List
 import scala.util.control.NonFatal
 
-class ValidationSpec extends FlatSpec{
+class ValidationSpec extends FlatSpec {
 
-  private val twoErrors:Validation[String,String] = Error[String](List("Number not even","Number too small"))
+  private val twoErrors: Validation[String, String] = Error[String](List("Number not even", "Number too small"))
 
   behavior of "map"
 
@@ -20,7 +20,7 @@ class ValidationSpec extends FlatSpec{
 
   behavior of "flatMap"
 
-  private val parseInt: (String) => Validation[String,Int] = s => try{
+  private val parseInt: (String) => Validation[String, Int] = s => try {
     Ok(s.toInt)
   } catch {
     case NonFatal(_) => Error(List(s"$s is not an int"))
@@ -45,7 +45,7 @@ class ValidationSpec extends FlatSpec{
   }
 
   it should "orElse an error or another error" in {
-    assert(twoErrors.orElse(Error(List("Ugly number"))) === Error(List("Number not even","Number too small","Ugly number")))
+    assert(twoErrors.orElse(Error(List("Ugly number"))) === Error(List("Number not even", "Number too small", "Ugly number")))
   }
 
   it should "orElse an ok value or something else" in {
@@ -67,7 +67,7 @@ class ValidationSpec extends FlatSpec{
   }
 
   it should "map2 over error and error" in {
-    assert(parseInt("a").map2(parseInt("b"))(_ + _) === Error(List("a is not an int","b is not an int")))
+    assert(parseInt("a").map2(parseInt("b"))(_ + _) === Error(List("a is not an int", "b is not an int")))
   }
 
 }

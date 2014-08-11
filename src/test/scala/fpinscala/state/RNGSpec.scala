@@ -5,25 +5,25 @@ import org.scalatest.FlatSpec
 
 class RNGSpec extends FlatSpec {
 
-  case class DummyRNG(seed:Int) extends RNG {
+  case class DummyRNG(seed: Int) extends RNG {
     override def nextInt: (Int, RNG) = {
-      val newSeed = if(seed == Int.MaxValue) 0 else seed+1
-      (seed,DummyRNG(newSeed))
+      val newSeed = if (seed == Int.MaxValue) 0 else seed + 1
+      (seed, DummyRNG(newSeed))
     }
   }
 
-  private def newRng(nextInt:Int) = DummyRNG(nextInt)
+  private def newRng(nextInt: Int) = DummyRNG(nextInt)
 
   behavior of "newRng"
 
-  it should "generate a RNG that will deliver the given Int" in{
+  it should "generate a RNG that will deliver the given Int" in {
     assert(newRng(23).nextInt._1 === 23)
   }
 
   it should "loop" in {
     val rng = newRng(Int.MaxValue)
-    val(i,rng2) = rng.nextInt
-    val(i2,_) = rng2.nextInt
+    val (i, rng2) = rng.nextInt
+    val (i2, _) = rng2.nextInt
     assert(i === Int.MaxValue)
     assert(i2 === 0)
   }
@@ -32,11 +32,11 @@ class RNGSpec extends FlatSpec {
 
   import RNG.nonNegativeInt
 
-  it should "generate a non negative int for -1" in{
+  it should "generate a non negative int for -1" in {
     assert(nonNegativeInt(newRng(-1))._1 === 0)
   }
 
-  it should "generate a non negative int for 0" in{
+  it should "generate a non negative int for 0" in {
     assert(nonNegativeInt(newRng(0))._1 === 0)
   }
   it should "generate a non negative int for Int.MinValue" in {
@@ -44,8 +44,8 @@ class RNGSpec extends FlatSpec {
   }
 
   it should "return the new state" in {
-    val (nni1,rng) = nonNegativeInt(newRng(23))
-    val (nni2,_) = nonNegativeInt(rng)
+    val (nni1, rng) = nonNegativeInt(newRng(23))
+    val (nni2, _) = nonNegativeInt(rng)
     assert(nni1 !== nni2)
   }
 
@@ -68,8 +68,8 @@ class RNGSpec extends FlatSpec {
   }
 
   it should "return the new state" in {
-    val (d1,rng) = double(newRng(23))
-    val (d2,_) = double(rng)
+    val (d1, rng) = double(newRng(23))
+    val (d2, _) = double(rng)
     assert(d1 !== d2)
   }
 
@@ -80,9 +80,9 @@ class RNGSpec extends FlatSpec {
 
   it should "generate a pair of int,double with different values" in {
     val rng = newRng(23)
-    val((i,d),rng3) = intDouble(rng)
+    val ((i, d), rng3) = intDouble(rng)
 
-    val (_,rng2) = int(rng)
+    val (_, rng2) = int(rng)
     assert(i === int(rng)._1)
     assert(i !== int(rng2)._1)
     assert(i !== int(rng3)._1)
@@ -97,7 +97,7 @@ class RNGSpec extends FlatSpec {
 
   it should "generate different doubles" in {
     val rng = newRng(12)
-    val ((d1,d2,d3),rng2) = double3(rng)
+    val ((d1, d2, d3), rng2) = double3(rng)
     val d4 = double(rng2)
     assert(d1 !== d2)
     assert(d1 !== d3)
@@ -112,9 +112,9 @@ class RNGSpec extends FlatSpec {
   import RNG.ints
 
   it should "generate a list of random ints" in {
-    val (l,rng) = ints(3)(newRng(23))
-    val (i3,_) = rng.nextInt
-    assert(l === List(23,24,25))
+    val (l, rng) = ints(3)(newRng(23))
+    val (i3, _) = rng.nextInt
+    assert(l === List(23, 24, 25))
     assert(i3 === 26)
   }
 
@@ -124,8 +124,8 @@ class RNGSpec extends FlatSpec {
 
   it should "retry when generated int is too big" in {
     val n = 2147483640
-    val rng = newRng(n+2)
-    val (res,rng2) = nonNegativeLessThan(n)(rng)
+    val rng = newRng(n + 2)
+    val (res, rng2) = nonNegativeLessThan(n)(rng)
     assert(res === 0)
 
   }

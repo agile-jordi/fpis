@@ -10,7 +10,7 @@ sealed trait Either[+E, +A] {
 
   def orElse[EE >: E, B >: A](b: => Either[EE, B]): Either[EE, B]
 
-  def map2[EE >: E, B, C](b: Either[EE, B])(f: (A, B) => C): Either[EE, C] = this.flatMap(aa => b.map(bb => f(aa,bb)))
+  def map2[EE >: E, B, C](b: Either[EE, B])(f: (A, B) => C): Either[EE, C] = this.flatMap(aa => b.map(bb => f(aa, bb)))
 }
 
 case class Left[+E](value: E) extends Either[E, Nothing] {
@@ -43,7 +43,7 @@ object Either {
 
   def traverse[E, A, B](l: List[A])(f: A => Either[E, B]): Either[E, List[B]] = {
     @tailrec
-    def loop(l: List[A], acc: List[B]): Either[E,List[B]] = l match {
+    def loop(l: List[A], acc: List[B]): Either[E, List[B]] = l match {
       case Nil => Right(List.reverse(acc))
       case Cons(a, as) => {
         val ob = f(a)

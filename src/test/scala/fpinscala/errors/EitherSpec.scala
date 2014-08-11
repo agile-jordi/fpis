@@ -4,11 +4,11 @@ import org.scalatest.FlatSpec
 import fpinscala.datastructures.List
 import scala.util.control.NonFatal
 
-class EitherSpec extends FlatSpec{
+class EitherSpec extends FlatSpec {
 
   behavior of "map"
 
-  val wrong:Either[String,String] = Left("Wrong!")
+  val wrong: Either[String, String] = Left("Wrong!")
 
   it should "map over a left" in {
     assert(wrong.map(s => s"Hello $s") === wrong)
@@ -20,7 +20,7 @@ class EitherSpec extends FlatSpec{
 
   behavior of "flatMap"
 
-  it should "flatMap over a left" in{
+  it should "flatMap over a left" in {
     assert(wrong.flatMap(s => Right(s"Hello $s")) === wrong)
   }
 
@@ -48,20 +48,20 @@ class EitherSpec extends FlatSpec{
 
   behavior of "map2"
 
-  it should "map2 over two rights" in{
+  it should "map2 over two rights" in {
     assert(Right("Hello").map2(Right(" World"))(_ + _) === Right("Hello World"))
   }
 
-  it should "map2 over a left and a right" in{
+  it should "map2 over a left and a right" in {
     assert(wrong.map2(Right(" World"))(_ + _) === wrong)
   }
 
-  it should "map2 over a right and a left" in{
+  it should "map2 over a right and a left" in {
     assert(Right("Hello").map2(wrong)(_ + _) === wrong)
   }
 
   it should "map2 over two lefts" in {
-    val no:Either[String,String] = Left("No!")
+    val no: Either[String, String] = Left("No!")
     assert(wrong.map2(no)(_ + _) === wrong)
   }
 
@@ -69,40 +69,39 @@ class EitherSpec extends FlatSpec{
 
   import Either.traverse
 
-  private val parseInt:(String => Either[String,Int]) = (s:String) => try{
+  private val parseInt: (String => Either[String, Int]) = (s: String) => try {
     Right(s.toInt)
   } catch {
     case NonFatal(_) => Left(s"$s is not an int")
   }
 
-  it should "traverse an empty list" in{
+  it should "traverse an empty list" in {
     assert(traverse(List.apply[String]())(parseInt) === Right(List.apply[String]()))
   }
 
-  it should "traverse a non empty list with no errors" in{
-    assert(traverse(List("1","2","3"))(parseInt) === Right(List(1,2,3)))
+  it should "traverse a non empty list with no errors" in {
+    assert(traverse(List("1", "2", "3"))(parseInt) === Right(List(1, 2, 3)))
   }
 
   it should "traverse a non empty list and return the first error" in {
-    assert(traverse(List("1","2","a","b"))(parseInt) === Left("a is not an int"))
+    assert(traverse(List("1", "2", "a", "b"))(parseInt) === Left("a is not an int"))
   }
 
   behavior of "sequence"
 
   import Either.sequence
 
-  it should "sequence an empty list" in{
-    assert(sequence(List.apply[Either[String,Int]]()) === Right(List.apply[Either[String,Int]]()))
+  it should "sequence an empty list" in {
+    assert(sequence(List.apply[Either[String, Int]]()) === Right(List.apply[Either[String, Int]]()))
   }
 
-  it should "sequence a non empty list with no errors" in{
-    assert(sequence(List(Right(1),Right(2),Right(3))) === Right(List(1,2,3)))
+  it should "sequence a non empty list with no errors" in {
+    assert(sequence(List(Right(1), Right(2), Right(3))) === Right(List(1, 2, 3)))
   }
 
   it should "sequence a non empty list and return the first error" in {
-    assert(sequence(List(Right(1),Right(2),Left("a is not an int"),Left("b is not an int"))) === Left("a is not an int"))
+    assert(sequence(List(Right(1), Right(2), Left("a is not an int"), Left("b is not an int"))) === Left("a is not an int"))
   }
-
 
 
 }

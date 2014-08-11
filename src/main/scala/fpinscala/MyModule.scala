@@ -38,28 +38,28 @@ object MyModule {
     loop(0)
   }
 
-  def isSorted[A](as: Array[A], gt: (A,A) => Boolean): Boolean = {
+  def isSorted[A](as: Array[A], gt: (A, A) => Boolean): Boolean = {
 
     @tailrec
-    def isSorted(from:Int):Boolean = {
+    def isSorted(from: Int): Boolean = {
       if (as.size <= from + 1) true
-      else if (!gt(as(from+1), as(from))) false
-      else isSorted(from+1)
+      else if (!gt(as(from + 1), as(from))) false
+      else isSorted(from + 1)
     }
 
     isSorted(0)
   }
 
-  def partial1[A,B,C](a: A, f: (A,B) => C): B => C = (b: B) => f(a, b)
+  def partial1[A, B, C](a: A, f: (A, B) => C): B => C = (b: B) => f(a, b)
 
-  def curry[A,B,C](f: (A, B) => C): A => (B => C) = (a:A) => (b:B) => f(a,b)
+  def curry[A, B, C](f: (A, B) => C): A => (B => C) = (a: A) => (b: B) => f(a, b)
 
-  def uncurry[A,B,C](f: A => B => C): (A, B) => C = (a:A, b:B) => f(a)(b)
+  def uncurry[A, B, C](f: A => B => C): (A, B) => C = (a: A, b: B) => f(a)(b)
 
-  def compose[A,B,C](f: B => C, g: A => B): A => C = (a:A) => f(g(a))
+  def compose[A, B, C](f: B => C, g: A => B): A => C = (a: A) => f(g(a))
 
-  def composeCheating1[A,B,C](f: B => C, g: A => B): A => C = f compose g
+  def composeCheating1[A, B, C](f: B => C, g: A => B): A => C = f compose g
 
-  def composeCheating2[A,B,C](f: B => C, g: A => B): A => C = g andThen f
+  def composeCheating2[A, B, C](f: B => C, g: A => B): A => C = g andThen f
 
 }
